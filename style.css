@@ -24,13 +24,9 @@ body {
 }
 
 .container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 2rem auto;
     padding: 2rem;
-    background-color: var(--secondary-bg);
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    border: 1px solid var(--card-bg);
 }
 
 header {
@@ -52,6 +48,14 @@ header .logo {
 header p {
     color: var(--text-secondary);
     font-size: 1.1rem;
+}
+
+.input-section {
+    background-color: var(--secondary-bg);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 1px solid var(--card-bg);
 }
 
 .input-section h2 {
@@ -105,9 +109,14 @@ header p {
     gap: 0.5rem;
 }
 
-.action-button:hover {
+.action-button:hover:not(:disabled) {
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(52, 211, 153, 0.2);
+}
+
+.action-button:disabled {
+    background: #4b5563;
+    cursor: not-allowed;
 }
 
 .hidden {
@@ -129,24 +138,44 @@ header p {
     color: var(--accent);
 }
 
-.itinerary-output {
-    background-color: var(--primary-bg);
-    padding: 1.5rem;
-    border-radius: 8px;
+.results-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.result-card {
+    background-color: var(--secondary-bg);
+    border-radius: 16px;
+    overflow: hidden;
     border: 1px solid var(--card-bg);
-    white-space: pre-wrap;
-    line-height: 1.8;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.map-container {
-    margin-top: 2rem;
+.result-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
 }
 
-.map-container h2 {
+.result-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.result-card-content {
+    padding: 1.5rem;
+}
+
+.result-card-content h3 {
     font-size: 1.5rem;
-    margin-bottom: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
 }
 
-.map-container iframe {
-    border-radius: 8px;
+.result-card-content p {
+    color: var(--text-secondary);
+    font-size: 1rem;
 }
