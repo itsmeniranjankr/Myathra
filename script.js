@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- CONFIGURATION ---
-    // PASTE YOUR GEMINI API KEY HERE
+    // Your Gemini API Key is embedded here.
     const GEMINI_API_KEY = "AIzaSyDyY3X1_10WfL7VlHFS85Jn2_H-vVm0hag";
 
     // --- DOM ELEMENTS ---
@@ -9,20 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const interestsInput = document.getElementById('interests-input');
     const resultsSection = document.getElementById('results-section');
     const loadingSpinner = document.getElementById('loading-spinner');
-    const itineraryOutput = document.getElementById('itinerary-output');
-    const mapContainer = document.getElementById('map-container');
-    const mapFrame = document.getElementById('map-frame');
+    const resultsGrid = document.getElementById('results-grid');
 
     // --- EVENT LISTENER ---
     generateBtn.addEventListener('click', generateItinerary);
 
     // --- MAIN FUNCTION ---
     async function generateItinerary() {
-        if (!GEMINI_API_KEY || GEMINI_API_KEY === "AIzaSyDyY3X1_10WfL7VlHFS85Jn2_H-vVm0hag") {
-            alert("ERROR: Please paste your Gemini API key into the script.js file.");
-            return;
-        }
-
         const location = locationInput.value.trim();
         const interests = interestsInput.value.trim();
 
@@ -34,8 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- UI STATE: START LOADING ---
         resultsSection.classList.remove('hidden');
         loadingSpinner.classList.remove('hidden');
-        itineraryOutput.classList.add('hidden');
-        mapContainer.classList.add('hidden');
+        resultsGrid.innerHTML = ''; // Clear previous results
         generateBtn.disabled = true;
         generateBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Generating...`;
 
@@ -45,16 +37,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 You are "Myathra", an expert local tour guide for Kerala, India.
                 A user is currently at "${location}" and is interested in "${interests}".
 
-                Your tasks are:
-                1.  Create a short, friendly, and practical tour itinerary for them. Include a creative title, a welcoming intro, and 2-3 specific, real tourist spots or activities near their location that match their interests. For each spot, provide a brief, appealing description.
-                2.  At the very end of your response, on a new line, write "MAP_QUERY:" followed by a simple, effective Google Maps search query that would show these locations. For example: "MAP_QUERY:Tourist places near Kodakara, Kerala".
+                Your task is to generate a list of 2-3 specific, real tourist spots or activities near their location that match their interests.
 
-                Keep the itinerary text engaging and easy to read.
+                You MUST respond with ONLY a valid JSON array of objects. Each object in the array should represent one location and have the following three properties:
+                1. "name": A string with the name of the location (e.g., "Athirappilly Falls").
+                2. "description": A string with a short, friendly, and appealing description of the location.
+                3. "imageQuery": A simple, effective search string for finding a good photo of the location (e.g., "Athirappilly Falls Kerala").
+
+                Do not include any text, titles, or introductions before or after the JSON array.
             `;
 
             // --- CALL THE GEMINI API ---
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${GEMINI_API_KEY}`;
-            const payload = { contents: [{ parts: [{ text: prompt }] }] };
+            const payload = { 
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: { responseMimeType: "application/json" }
+            };
 
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -67,24 +65,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const result = await response.json();
-            const fullResponseText = result.candidates[0].content.parts[0].text;
-
-            // --- PARSE THE RESPONSE ---
-            const parts = fullResponseText.split("MAP_QUERY:");
-            const itineraryText = parts[0].trim();
-            const mapQuery = parts[1] ? parts[1].trim() : `Tourist places near ${location}`;
+            const jsonResponseText = result.candidates[0].content.parts[0].text;
+            const locations = JSON.parse(jsonResponseText);
 
             // --- UPDATE THE UI ---
-            itineraryOutput.textContent = itineraryText;
-            updateMap(mapQuery);
-
-            itineraryOutput.classList.remove('hidden');
-            mapContainer.classList.remove('hidden');
+            displayResults(locations);
 
         } catch (error) {
             console.error("Error generating itinerary:", error);
-            itineraryOutput.textContent = `Sorry, an error occurred. Please try again.\n\nDetails: ${error.message}`;
-            itineraryOutput.classList.remove('hidden');
+            resultsGrid.innerHTML = `<p class="text-red-500 text-center">Sorry, an error occurred. Please try again. Details: ${error.message}</p>`;
         } finally {
             // --- UI STATE: END LOADING ---
             loadingSpinner.classList.add('hidden');
@@ -93,10 +82,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function updateMap(query) {
-        // Use Google Maps Embed API
-        const encodedQuery = encodeURIComponent(query);
-        const mapUrl = `https://www.google.com/maps/embed/v1/search?key=${GEMINI_API_KEY}&q=${encodedQuery}`;
-        mapFrame.src = mapUrl;
+    function displayResults(locations) {
+        if (!locations || locations.length === 0) {
+            resultsGrid.innerHTML = `<p class="text-center text-gray-400">The AI couldn't find any specific recommendations. Try being more specific with your interests!</p>`;
+            return;
+        }
+
+        locations.forEach(location => {
+            const card = document.createElement('div');
+            card.className = 'result-card';
+
+            // Use a placeholder image service to generate images from the AI's query
+            const imageUrl = `https://placehold.co/600x400/1f2937/374151?text=${encodeURIComponent(location.imageQuery)}`;
+
+            card.innerHTML = `
+                <img src="${imageUrl}" alt="${location.name}" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1f2937/374151?text=Image+Not+Found';">
+                <div class="result-card-content">
+                    <h3>${location.name}</h3>
+                    <p>${location.description}</p>
+                </div>
+            `;
+            resultsGrid.appendChild(card);
+        });
     }
 });
