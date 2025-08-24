@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+:root {
+    --primary-bg: #111827;
+    --secondary-bg: #1f2937;
+    --card-bg: #374151;
+    --text-primary: #f9fafb;
+    --text-secondary: #9ca3af;
+    --accent: #34d399;
+    --accent-dark: #059669;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--primary-bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: var(--secondary-bg);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 1px solid var(--card-bg);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+header .logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.input-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: var(--primary-bg);
+    border: 2px solid var(--card-bg);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.3);
+}
+
+.action-button {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(45deg, var(--accent-dark), var(--accent));
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.action-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(52, 211, 153, 0.2);
+}
+
+.hidden {
+    display: none;
+}
+
+.results-section {
+    margin-top: 2.5rem;
+}
+
+.loading-spinner {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+}
+
+.loading-spinner i {
+    font-size: 2.5rem;
+    color: var(--accent);
+}
+
+.itinerary-output {
+    background-color: var(--primary-bg);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--card-bg);
+    white-space: pre-wrap;
+    line-height: 1.8;
+}
+
+.map-container {
+    margin-top: 2rem;
+}
+
+.map-container h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.map-container iframe {
+    border-radius: 8px;
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Myathra - Your AI Tour Guide</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <h1>Myathra</h1>
+            </div>
+            <p>Your AI-powered guide to discovering amazing places nearby.</p>
+        </header>
+
+        <main>
+            <div class="input-section">
+                <h2>Plan Your Adventure</h2>
+                <div class="form-group">
+                    <label for="location-input">Where are you right now?</label>
+                    <input type="text" id="location-input" placeholder="e.g., Kodakara, Kerala" value="Kodakara, Kerala">
+                </div>
+                <div class="form-group">
+                    <label for="interests-input">What are you interested in?</label>
+                    <input type="text" id="interests-input" placeholder="e.g., temples, local food, nature walks">
+                </div>
+                <button id="generate-btn" class="action-button">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    Find Places
+                </button>
+            </div>
+
+            <div id="results-section" class="results-section hidden">
+                <div id="loading-spinner" class="loading-spinner hidden">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    <p>Myathra is finding the best spots for you...</p>
+                </div>
+
+                <div id="itinerary-output" class="itinerary-output">
+                    <!-- AI-generated text will go here -->
+                </div>
+
+                <div id="map-container" class="map-container hidden">
+                    <h2>Your Custom Map</h2>
+                    <iframe 
+                        id="map-frame"
+                        width="100%" 
+                        height="450" 
+                        style="border:0;" 
+                        loading="lazy" 
+                        allowfullscreen 
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="">
+                    </iframe>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
